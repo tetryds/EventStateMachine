@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.1585
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventStateMachine", "EventStateMachine\EventStateMachine.csproj", "{9E20AAB1-278B-4B00-BF4E-136E0001D68D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventStateMachineTests", "EventStateMachineTests\EventStateMachineTests.csproj", "{60C90011-F7F7-4ACF-A8ED-CCBB77E349A2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9E20AAB1-278B-4B00-BF4E-136E0001D68D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E20AAB1-278B-4B00-BF4E-136E0001D68D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E20AAB1-278B-4B00-BF4E-136E0001D68D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E20AAB1-278B-4B00-BF4E-136E0001D68D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60C90011-F7F7-4ACF-A8ED-CCBB77E349A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60C90011-F7F7-4ACF-A8ED-CCBB77E349A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60C90011-F7F7-4ACF-A8ED-CCBB77E349A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60C90011-F7F7-4ACF-A8ED-CCBB77E349A2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {676196BE-B341-480F-90F3-AE233E4CA2FE}
+	EndGlobalSection
+EndGlobal

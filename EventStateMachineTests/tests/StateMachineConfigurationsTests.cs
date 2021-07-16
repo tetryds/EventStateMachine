@@ -10,45 +10,29 @@ namespace tetryds.Tests
     public class StateMachineConfigurationsTests
     {
         [Test]
-        public void StateUpdatesWithParams()
-        {
-            List<string> updateParams = new List<string>();
-            StateMachine<string, string, string> stateMachine = new StateMachine<string, string, string>("0", s => updateParams.Add(s));
-
-            stateMachine.Update("A");
-            stateMachine.Update("B");
-            stateMachine.Update("C");
-
-            List<string> expectedUpdateParams = new List<string> { "A", "B", "C" };
-
-            Assert.AreEqual("0", stateMachine.Current, "Current state differs from expected state");
-            CollectionAssert.AreEqual(expectedUpdateParams, updateParams);
-        }
-
-        [Test]
         public void SkipStep()
         {
             List<string> stateChangeResults = new List<string>();
             List<string> updateResults = new List<string>();
             List<string> transitionResults = new List<string>();
 
-            StateMachine<string, string, object> stateMachine = new StateMachine<string, string, object>("0", o => updateResults.Add("0"))
-                .AddState("1", o => updateResults.Add("1"))
-                .AddState("2", o => updateResults.Add("2"))
-                .AddState("3", o => updateResults.Add("3"))
+            StateMachine<string, string, Action> stateMachine = new StateMachine<string, string, Action>("0", () => updateResults.Add("0"))
+                .AddState("1", () => updateResults.Add("1"))
+                .AddState("2", () => updateResults.Add("2"))
+                .AddState("3", () => updateResults.Add("3"))
                 .AddTransition("next", "0", "1", () => transitionResults.Add("next"))
                 .AddTransition("next", "1", "2", () => transitionResults.Add("next"))
                 .AddTransition("next", "2", "3", () => transitionResults.Add("next"));
 
             stateMachine.StateChanged += state => stateChangeResults.Add(state);
 
-            stateMachine.Update(null);
+            stateMachine.Behavior();
             stateMachine.RaiseEvent("next");
-            stateMachine.Update(null);
+            stateMachine.Behavior();
             stateMachine.RaiseEvent("next");
-            stateMachine.Update(null);
+            stateMachine.Behavior();
             stateMachine.RaiseEvent("next");
-            stateMachine.Update(null);
+            stateMachine.Behavior();
 
             List<string> expectedStateChanges = new List<string> { "1", "2", "3" };
             List<string> expectedUpdates = new List<string> { "0", "1", "2", "3" };

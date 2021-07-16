@@ -49,8 +49,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="tests\StateMachineExceptionTests.cs" />
-    <Compile Include="tests\StateMachineTestsComplexTree.cs" />
-    <Compile Include="tests\StateMachineTests.cs" />
+    <Compile Include="tests\StateMachineConfigurationsTests.cs" />
+    <Compile Include="tests\StateMachineTransitionsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

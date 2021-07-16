@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace tetryds.Tools
 {
-    public class StateMachine<TState, TEvent>
+    public class StateMachine<TState, TEvent, TParam>
     {
-        Dictionary<TState, Action> stateMap = new Dictionary<TState, Action>();
+        Dictionary<TState, Action<TParam>> stateMap = new Dictionary<TState, Action<TParam>>();
 
         Dictionary<TEvent, TransitionMap> eventMap = new Dictionary<TEvent, TransitionMap>();
 
@@ -29,31 +29,31 @@ namespace tetryds.Tools
             Current = initial;
         }
 
-        public StateMachine(TState initial, Action update)
+        public StateMachine(TState initial, Action<TParam> update)
         {
             AddState(initial, update);
             Current = initial;
         }
 
-        public StateMachine<TState, TEvent> AddState(TState key)
+        public StateMachine<TState, TEvent, TParam> AddState(TState key)
         {
             AddState(key, null);
             return this;
         }
 
-        public StateMachine<TState, TEvent> AddState(TState key, Action update)
+        public StateMachine<TState, TEvent, TParam> AddState(TState key, Action<TParam> update)
         {
             stateMap.Add(key, update);
             return this;
         }
 
-        public StateMachine<TState, TEvent> AddTransition(TEvent key, TState from, TState to)
+        public StateMachine<TState, TEvent, TParam> AddTransition(TEvent key, TState from, TState to)
         {
             AddTransition(key, from, to, null);
             return this;
         }
 
-        public StateMachine<TState, TEvent> AddTransition(TEvent key, TState from, TState to, Action trigger)
+        public StateMachine<TState, TEvent, TParam> AddTransition(TEvent key, TState from, TState to, Action trigger)
         {
             if (!stateMap.ContainsKey(from))
                 throw new Exception("Attempting to add transition FROM unknown state. Add state before creating transitions.");
@@ -69,7 +69,7 @@ namespace tetryds.Tools
             return this;
         }
 
-        public StateMachine<TState, TEvent> AddGlobalTransition(TEvent key, TState to, Action trigger)
+        public StateMachine<TState, TEvent, TParam> AddGlobalTransition(TEvent key, TState to, Action trigger)
         {
             if (!stateMap.ContainsKey(to))
                 throw new Exception($"Attempting to add transition TO unknown state '{to}'. Add state before creating transitions.");
@@ -81,13 +81,13 @@ namespace tetryds.Tools
             return this;
         }
 
-        public StateMachine<TState, TEvent> AddGlobalTransition(TEvent key, TState to)
+        public StateMachine<TState, TEvent, TParam> AddGlobalTransition(TEvent key, TState to)
         {
             AddGlobalTransition(key, to, null);
             return this;
         }
 
-        public StateMachine<TState, TEvent> SetState(TState key)
+        public StateMachine<TState, TEvent, TParam> SetState(TState key)
         {
             if (!stateMap.ContainsKey(key))
                 throw new Exception($"Cannot set unknown state '{key}'. Make sure it has been added.");
@@ -96,9 +96,9 @@ namespace tetryds.Tools
             return this;
         }
 
-        public void Update()
+        public void Update(TParam param)
         {
-            stateMap[Current]?.Invoke();
+            stateMap[Current]?.Invoke(param);
         }
 
         public void RaiseEvent(TEvent eventKey)

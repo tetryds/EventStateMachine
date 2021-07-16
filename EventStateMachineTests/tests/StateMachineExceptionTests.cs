@@ -12,7 +12,7 @@ namespace tetryds.Tests
         [Test]
         public void ExceptionSetInvalidState()
         {
-            StateMachine<string, string> stateMachine = new StateMachine<string, string>("0");
+            StateMachine<string, string, object> stateMachine = new StateMachine<string, string, object>("0");
 
             Assert.Throws<Exception>(() => stateMachine.SetState("1"));
         }
@@ -20,7 +20,7 @@ namespace tetryds.Tests
         [Test]
         public void ExceptionAddInvalidLocalTransition()
         {
-            StateMachine<string, string> stateMachine = new StateMachine<string, string>("0");
+            StateMachine<string, string, object> stateMachine = new StateMachine<string, string, object>("0");
 
             Assert.Throws<Exception>(() => stateMachine.AddTransition("0->1", "0", "1"));
             Assert.Throws<Exception>(() => stateMachine.AddTransition("0->1", "1", "2"));
@@ -29,7 +29,7 @@ namespace tetryds.Tests
         [Test]
         public void ExceptionAddInvalidGlobalTransition()
         {
-            StateMachine<string, string> stateMachine = new StateMachine<string, string>("0");
+            StateMachine<string, string, object> stateMachine = new StateMachine<string, string, object>("0");
 
             Assert.Throws<Exception>(() => stateMachine.AddGlobalTransition("x->1", "1"));
         }
@@ -37,7 +37,7 @@ namespace tetryds.Tests
         [Test]
         public void ExceptionAddInvalidDuplicateTransitionFrom()
         {
-            StateMachine<string, string> stateMachine = new StateMachine<string, string>("0")
+            StateMachine<string, string, object> stateMachine = new StateMachine<string, string, object>("0")
                 .AddState("1")
                 .AddState("2");
 
@@ -48,7 +48,7 @@ namespace tetryds.Tests
         [Test]
         public void ExceptionAddInvalidDuplicateTransitionTo()
         {
-            StateMachine<string, string> stateMachine = new StateMachine<string, string>("0")
+            StateMachine<string, string, object> stateMachine = new StateMachine<string, string, object>("0")
                 .AddState("1");
 
             stateMachine.AddTransition("0->1", "0", "1");

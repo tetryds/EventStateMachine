@@ -7,9 +7,9 @@ using tetryds.Tools;
 namespace tetryds.Tests
 {
     [TestFixture]
-    public class StateMachineTests
+    public class StateMachineTransitionsTests
     {
-        StateMachine<string, string> stateMachine;
+        StateMachine<string, string, object> stateMachine;
 
         event Action<string> StateChanged;
         event Action<string> StateUpdated;
@@ -18,10 +18,10 @@ namespace tetryds.Tests
         [SetUp]
         public void SetUp()
         {
-            stateMachine = new StateMachine<string, string>("0", () => StateUpdated?.Invoke("0"))
-                .AddState("1", () => StateUpdated?.Invoke("1"))
-                .AddState("2", () => StateUpdated?.Invoke("2"))
-                .AddState("3", () => StateUpdated?.Invoke("3"))
+            stateMachine = new StateMachine<string, string, object>("0", o => StateUpdated?.Invoke("0"))
+                .AddState("1", o => StateUpdated?.Invoke("1"))
+                .AddState("2", o => StateUpdated?.Invoke("2"))
+                .AddState("3", o => StateUpdated?.Invoke("3"))
                 .AddTransition("0->1", "0", "1", () => TransitionTriggered?.Invoke("0->1"))
                 .AddTransition("1->1", "1", "1", () => TransitionTriggered?.Invoke("1->1"))
                 .AddTransition("1->2", "1", "2", () => TransitionTriggered?.Invoke("1->2"))
@@ -47,9 +47,9 @@ namespace tetryds.Tests
             List<string> transitionResults = new List<string>();
             TransitionTriggered += transitionKey => transitionResults.Add(transitionKey);
 
-            stateMachine.Update();
+            stateMachine.Update(null);
             stateMachine.SetState("2");
-            stateMachine.Update();
+            stateMachine.Update(null);
 
             List<string> expectedStateChanges = new List<string> { "2" };
             List<string> expectedUpdates = new List<string> { "0", "2" };
@@ -69,9 +69,9 @@ namespace tetryds.Tests
             List<string> transitionResults = new List<string>();
             TransitionTriggered += transitionKey => transitionResults.Add(transitionKey);
 
-            stateMachine.Update();
-            stateMachine.Update();
-            stateMachine.Update();
+            stateMachine.Update(null);
+            stateMachine.Update(null);
+            stateMachine.Update(null);
 
             List<string> expectedUpdates = new List<string> { "0", "0", "0" };
             List<string> expectedTransitions = new List<string> { };
@@ -80,6 +80,7 @@ namespace tetryds.Tests
             CollectionAssert.AreEqual(expectedUpdates, updateResults);
             CollectionAssert.AreEqual(expectedTransitions, transitionResults);
         }
+
 
         [Test]
         public void StateTransitions()
@@ -107,9 +108,9 @@ namespace tetryds.Tests
             List<string> transitionResults = new List<string>();
             TransitionTriggered += transitionKey => transitionResults.Add(transitionKey);
 
-            stateMachine.Update();
+            stateMachine.Update(null);
             stateMachine.RaiseEvent("0->1");
-            stateMachine.Update();
+            stateMachine.Update(null);
 
             List<string> expectedUpdates = new List<string> { "0", "1" };
             List<string> expectedTransitions = new List<string> { "0->1" };
@@ -127,9 +128,9 @@ namespace tetryds.Tests
             List<string> transitionResults = new List<string>();
             TransitionTriggered += transitionKey => transitionResults.Add(transitionKey);
 
-            stateMachine.Update();
+            stateMachine.Update(null);
             stateMachine.RaiseEvent("x->3");
-            stateMachine.Update();
+            stateMachine.Update(null);
 
             List<string> expectedUpdates = new List<string> { "0", "3" };
             List<string> expectedTransitions = new List<string> { "x->3" };
@@ -147,9 +148,9 @@ namespace tetryds.Tests
             List<string> transitionResults = new List<string>();
             TransitionTriggered += transitionKey => transitionResults.Add(transitionKey);
 
-            stateMachine.Update();
+            stateMachine.Update(null);
             stateMachine.RaiseEvent("0->3");
-            stateMachine.Update();
+            stateMachine.Update(null);
 
             List<string> expectedUpdates = new List<string> { "0", "0" };
             List<string> expectedTransitions = new List<string> { };
@@ -167,9 +168,9 @@ namespace tetryds.Tests
             List<string> transitionResults = new List<string>();
             TransitionTriggered += transitionKey => transitionResults.Add(transitionKey);
 
-            stateMachine.Update();
+            stateMachine.Update(null);
             stateMachine.RaiseEvent("2->3");
-            stateMachine.Update();
+            stateMachine.Update(null);
 
             List<string> expectedUpdates = new List<string> { "0", "0" };
             List<string> expectedTransitions = new List<string> { };
@@ -187,16 +188,16 @@ namespace tetryds.Tests
             List<string> transitionResults = new List<string>();
             TransitionTriggered += transitionKey => transitionResults.Add(transitionKey);
 
-            stateMachine.Update();
+            stateMachine.Update(null);
             stateMachine.RaiseEvent("0->1");
-            stateMachine.Update();
-            stateMachine.Update();
+            stateMachine.Update(null);
+            stateMachine.Update(null);
             stateMachine.RaiseEvent("0->1");
-            stateMachine.Update();
+            stateMachine.Update(null);
             stateMachine.RaiseEvent("1->2");
             stateMachine.RaiseEvent("2->3");
             stateMachine.RaiseEvent("1->2");
-            stateMachine.Update();
+            stateMachine.Update(null);
 
             List<string> expectedUpdates = new List<string> { "0", "1", "1", "1", "3" };
             List<string> expectedTransitions = new List<string> { "0->1", "1->2", "2->3" };
@@ -214,11 +215,11 @@ namespace tetryds.Tests
             List<string> transitionResults = new List<string>();
             TransitionTriggered += transitionKey => transitionResults.Add(transitionKey);
 
-            stateMachine.Update();
+            stateMachine.Update(null);
             stateMachine.RaiseEvent("0->1");
-            stateMachine.Update();
+            stateMachine.Update(null);
             stateMachine.RaiseEvent("1->1");
-            stateMachine.Update();
+            stateMachine.Update(null);
 
             List<string> expectedUpdates = new List<string> { "0", "1", "1" };
             List<string> expectedTransitions = new List<string> { "0->1", "1->1" };
@@ -236,13 +237,13 @@ namespace tetryds.Tests
             List<string> transitionResults = new List<string>();
             TransitionTriggered += transitionKey => transitionResults.Add(transitionKey);
 
-            stateMachine.Update();
+            stateMachine.Update(null);
             stateMachine.RaiseEvent("0->1");
             stateMachine.RaiseEvent("1->2");
             stateMachine.RaiseEvent("2->3");
-            stateMachine.Update();
+            stateMachine.Update(null);
             stateMachine.RaiseEvent("x->3");
-            stateMachine.Update();
+            stateMachine.Update(null);
 
             List<string> expectedUpdates = new List<string> { "0", "3", "3" };
             List<string> expectedTransitions = new List<string> { "0->1", "1->2", "2->3", "x->3" };
